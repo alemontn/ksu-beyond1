@@ -22,11 +22,10 @@ jobs:
           fetch-depth: 100
 
       - name: Get GCC toolchain
-        uses: actions/checkout@v3
-        with:
-          repository: mvaisakh/gcc-arm64
-          ref: 05cb20a52f12389c3f2340b5103485108feae302
-          path: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
+        run: |
+          sudo apt install flex bison ncurses-dev texinfo gcc gperf patch libtool automake g++ libncurses5-dev gawk subversion expat libexpat1-dev python-all-dev binutils-dev bc libcap-dev autoconf libgmp-dev build-essential pkg-config libmpc-dev libmpfr-dev autopoint gettext txt2man liblzma-dev libssl-dev libz-dev mercurial wget tar gcc-10 g++-10 zstd -y --fix-broken --fix-missing
+          mkdir $TPATH
+          curl -Lso- https://github.com/mvaisakh/gcc-build/releases/download/30052024/eva-gcc-arm64-30052024.xz | tar --strip-components=1 -xv -C $TPATH
 
       - name: Integrate KernelSU
         run: |
@@ -48,7 +47,6 @@ jobs:
           SUBARCH: arm64
           CROSS_COMPILE: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain/bin/aarch64-elf-
         run: |
-          sudo apt install -y binutils
           cd $KPATH
           PATH="$HOME"/toolchain/bin:"$PATH"
           export CC ARCH SUBARCH CROSS_COMPILE
