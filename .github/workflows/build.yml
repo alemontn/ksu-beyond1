@@ -29,6 +29,14 @@ jobs:
           cd kernel
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
 
+      - name: Show paths
+        run: |
+          echo "**** toolchain:"
+          find ~/toolchain
+          echo "**** kernel:"
+          find ~/kernel
+          false
+
       - name: Build kernel
         env:
           CC: gcc
