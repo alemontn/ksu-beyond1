@@ -4,6 +4,10 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  KPATH: /home/runner/work/ksu-beyond1/ksu-beyond1/kernel
+  TPATH: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +18,7 @@ jobs:
         with:
           repository: linux4-bringup-priv/android_kernel_samsung_exynos9820
           ref: lineage-21.0
-          path: /home/runner/kernel
+          path: /home/runner/work/ksu-beyond1/ksu-beyond1/kernel
           fetch-depth: 100
 
       - name: Get GCC toolchain
@@ -22,19 +26,19 @@ jobs:
         with:
           repository: mvaisakh/gcc-arm64
           ref: 05cb20a52f12389c3f2340b5103485108feae302
-          path: /home/runner/toolchain
+          path: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
 
       - name: Integrate KernelSU
         run: |
-          cd ~/kernel
+          cd $KPATH
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
 
       - name: Show paths
         run: |
           echo "**** toolchain:"
-          find ~/toolchain
+          find $TPATH
           echo "**** kernel:"
-          find ~/kernel
+          find $KPATH
           false
 
       - name: Build kernel
@@ -42,10 +46,10 @@ jobs:
           CC: gcc
           ARCH: arm64
           SUBARCH: arm64
-          CROSS_COMPILE: ~/toolchain/bin/aarch64-elf-
+          CROSS_COMPILE: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain/bin/aarch64-elf-
         run: |
           sudo apt install -y binutils
-          cd ~/kernel
+          cd $KPATH
           PATH="$HOME"/toolchain/bin:"$PATH"
           export CC ARCH SUBARCH CROSS_COMPILE
           make O=out "exynos9820-beyond1lte_defconfig"
