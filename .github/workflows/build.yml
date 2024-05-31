@@ -14,7 +14,7 @@ jobs:
         with:
           repository: linux4-bringup-priv/android_kernel_samsung_exynos9820
           ref: lineage-21.0
-          path: ~/kernel
+          path: /home/runner/kernel
           fetch-depth: 100
 
       - name: Get GCC toolchain
@@ -22,7 +22,7 @@ jobs:
         with:
           repository: mvaisakh/gcc-arm64
           ref: 05cb20a52f12389c3f2340b5103485108feae302
-          path: ~/toolchain
+          path: /home/runner/toolchain
 
       - name: Integrate KernelSU
         run: |
