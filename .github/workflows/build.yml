@@ -34,11 +34,12 @@ jobs:
           CC: gcc
           ARCH: arm64
           SUBARCH: arm64
-          CROSS_COMPILE: aarch64-elf-
+          CROSS_COMPILE: ~/toolchain/bin/aarch64-elf-
         run: |
           sudo apt install -y binutils
           cd kernel
           PATH="$HOME"/toolchain/bin:"$PATH"
+          export CC ARCH SUBARCH CROSS_COMPILE
           make O=out "exynos9820-beyond1lte_defconfig"
           make -j$(nproc --all) O=out prepare
           make -j$(nproc --all) O=out
