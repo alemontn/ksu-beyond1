@@ -33,5 +33,5 @@ jobs:
         run: |
           sudo apt install -y binutils
           cd kernel
-          make O=out ARCH=arm64 "arch/arm64/configs/exynos9820-beyond1lte_defconfig"
+          make O=out ARCH=arm64 "exynos9820-beyond1lte_defconfig"
           make -j$(nproc --all) O=out ARCH=arm64 SUBARCH=arm64 CC=gcc CROSS_COMPILE="$HOME"/toolchain/bin/aarch64-elf-
