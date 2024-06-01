@@ -36,14 +36,6 @@ jobs:
           cd $KPATH
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
 
-      - name: Show paths
-        run: |
-          echo "***** toolchain *****"
-          find $TPATH
-          echo "***** kernel *****"
-          find $KPATH
-          false
-
       - name: Build kernel
         env:
           CC: clang
@@ -52,7 +44,7 @@ jobs:
           SUBARCH: arm64
         run: |
           cd $KPATH
-          export PATH="$HOME"/toolchain/bin:"$PATH"
+          export PATH="$TPATH"/bin:"$PATH"
           export CC CROSS_COMPILE ARCH SUBARCH
           make CC=$CC O=out "exynos9820-beyond1lte_defconfig"
           make -j$(nproc --all) CC=$CC O=out
