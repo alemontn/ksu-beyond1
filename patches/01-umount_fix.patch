@@ -4,27 +4,13 @@ KernelSU: support umount modules for 4.4 or higher Non-GKI kernel
 @@ -32,6 +32,8 @@
  #include <linux/vmalloc.h>
  #endif
- 
+
 +#include "../../fs/mount.h"
 +
  #include "allowlist.h"
  #include "arch.h"
  #include "core_hook.h"
-@@ -53,7 +55,12 @@
- 	if (is_manager()) {
- 		// we are manager, allow!
- 		return true;
--	}
-+	} else {
-+                int err = ksu_path_umount(path, flags);
-+                if (err) {
-+                	pr_warn("umount %s failed: %d\n", mnt, err);
-+                }
-+        }
- 	return ksu_is_allow_uid(current_uid().val);
- }
- 
-@@ -453,9 +460,47 @@
+@@ -453,9 +455,47 @@
  {
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0) || defined(KSU_UMOUNT)
  	return path_umount(path, flags);
@@ -73,4 +59,3 @@ KernelSU: support umount modules for 4.4 or higher Non-GKI kernel
 +	//not tested
  #endif
  }
- 
