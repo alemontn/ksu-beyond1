@@ -37,11 +37,16 @@ jobs:
           CC: clang
           ARCH: arm64
           SUBARCH: arm64
-          CROSS_COMPILE: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain/bin/
         run: |
           cd $KPATH
-          PATH="$HOME"/toolchain/bin:"$PATH"
-          export CC ARCH SUBARCH CROSS_COMPILE
-          make O=out "exynos9820-beyond1lte_defconfig"
-          make -j$(nproc --all) O=out CC=$CC prepare
-          make -j$(nproc --all) O=out CC=$CC
+          export PATH="$HOME"/toolchain/bin:"$PATH"
+          export CC ARCH
+          make CC=$CC O=out "exynos9820-beyond1lte_defconfig"
+          make -j$(nproc --all) CC=$CC O=out
+          mv out/arch/arm64/boot/Image.gz* ~
+
+      - name: Upload compiled kernel
+        uses: actions/upload-artifact@v3
+        with:
+          name: kernel
+          path: /home/runner/Image.gz-dtb
