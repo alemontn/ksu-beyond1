@@ -34,7 +34,19 @@ jobs:
         run: |
           cd $KPATH
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- v"0.9.5"
-          git commit -a -m "KernelSU patches"
+
+      - name: Get patches
+        uses: actions/checkout@v3
+        with:
+          repository: alemontn/ksu-beyond1
+          path: /home/runner/work/ksu-beyond1/ksu-beyond1/patches
+
+      - name: Apply patches
+        run: |
+          cd $KPATH
+          for patch in ../patches/patches/*.patch; do
+            git apply "$patch"
+          done
 
       - name: Build kernel
         env:
