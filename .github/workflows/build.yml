@@ -36,6 +36,14 @@ jobs:
           cd $KPATH
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
 
+      - name: Show paths
+        run: |
+          echo "***** toolchain *****"
+          find $TPATH
+          echo "***** kernel *****"
+          find $KPATH
+          false
+
       - name: Build kernel
         env:
           CC: clang
