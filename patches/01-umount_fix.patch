@@ -1,21 +1,33 @@
 KernelSU: support umount modules for 4.4 or higher Non-GKI kernel
-from wxt1221 tiann/KernelSU pr #1060
---- a/KernelSU/kernel/core_hook.c	2023-11-20 16:15:20.950130000 +0800
-+++ b/KernelSU/kernel/core_hook.c	2023-11-20 20:40:17.052177835 +0800
-@@ -18,6 +18,7 @@
- #include "linux/fs.h"
- #include "linux/namei.h"
- #include "linux/rcupdate.h"
-+#include "../../fs/mount.h"
+--- a/KernelSU/kernel/core_hook.c	2024-05-30 23:07:33.806592835 +0100
++++ b/KernelSU/kernel/core_hook.c	2024-06-01 23:54:54.242818992 +0100
+@@ -32,6 +32,8 @@
+ #include <linux/vmalloc.h>
+ #endif
  
++#include "../../fs/mount.h"
++
  #include "allowlist.h"
  #include "arch.h"
-@@ -30,6 +31,51 @@
- #include "uid_observer.h"
- #include "kernel_compat.h"
+ #include "core_hook.h"
+@@ -53,7 +55,12 @@
+ 	if (is_manager()) {
+ 		// we are manager, allow!
+ 		return true;
+-	}
++	} else {
++                int err = ksu_path_umount(path, flags);
++                if (err) {
++                	pr_warn("umount %s failed: %d\n", mnt, err);
++                }
++        }
+ 	return ksu_is_allow_uid(current_uid().val);
+ }
  
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
-+
+@@ -453,9 +460,47 @@
+ {
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0) || defined(KSU_UMOUNT)
+ 	return path_umount(path, flags);
 +#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4, 4, 0)
 +extern bool may_mount(void);
 +extern int check_mnt(struct mount *mnt);
@@ -55,22 +67,10 @@ from wxt1221 tiann/KernelSU pr #1060
 +	mntput_no_expire(mnt);
 +	return ret;
 +}
-+#else
-+	//not tested
-+#endif
-+
- extern int handle_sepolicy(unsigned long arg3, void __user *arg4);
- 
- static inline bool is_allow_su()
-@@ -495,7 +541,10 @@
- 		pr_info("umount %s failed: %d\n", path->dentry->d_iname, err);
- 	}
  #else
 -	// TODO: umount for non GKI kernel
-+	int err = ksu_path_umount(path, flags);
-+	if (err) {
-+		pr_info("umount %s failed: %d\n", path->dentry->d_iname, err);
-+	}
+-	return -ENOSYS;
++	//not tested
  #endif
  }
  
