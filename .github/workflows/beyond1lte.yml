@@ -34,7 +34,7 @@ jobs:
       - name: Integrate KernelSU
         run: |
           cd $KPATH
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- "0.9.5"
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- v"0.9.5"
 
       - name: Build kernel
         env:
