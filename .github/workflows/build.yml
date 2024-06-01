@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 100
 
       - name: Get clang toolchain
-        uses:
+        uses: actions/checkout@v3
         with:
           repository: kdrag0n/proton-clang
           ref: master
