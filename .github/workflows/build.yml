@@ -25,9 +25,11 @@ jobs:
           fetch-depth: 100
 
       - name: Get clang toolchain
-        run: |
-          mkdir $TPATH
-          curl -Lso- https://github.com/kdrag0n/proton-clang/archive/refs/heads/master.zip | bsdtar --strip-components=1 -x -C $TPATH
+        uses: actions/checkout@v3
+        with:
+          repository: kdrag0n/proton-clang
+          path: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
+          fetch-depth: 100
 
       - name: Integrate KernelSU
         run: |
