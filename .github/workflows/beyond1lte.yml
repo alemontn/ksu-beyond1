@@ -37,6 +37,8 @@ jobs:
         run: |
           cd $KPATH
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- v"0.9.5"
+          git add .
+          git commit --author="basil <20985102-alemontn@users.noreply.gitlab.com>" -a -m "add KernelSU"
 
       - name: Get patches
         uses: actions/checkout@v3
