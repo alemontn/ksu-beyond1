@@ -58,12 +58,7 @@ jobs:
       - name: Show environment
         run: |
           echo "==> PATHS"
-          echo " * kernel"
-          find ${{ matrix.kpath }}
-          echo " * toolchain"
-          find ${{ matrix.tpath }}
-          echo " * patches"
-          find ${{ matrix.kpath }}../patches
+          find "$HOME"
           echo "==> KERNEL CONFIG"
           for TERM in KPROBES HAVE_PROBES KPROBE_EVENTS KSU; do
             grep -F "CONFIG_$TERM" <${{ matrix.defconfig }}
