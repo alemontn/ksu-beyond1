@@ -29,7 +29,10 @@ Tested:
 
 See [TO-DO.md](https://github.com/alemontn/ksu-beyond1/blob/main/TO-DO.md)
 
-(The to-do list is sorted by highest priority to lowest)
+The to-do list is sorted by highest priority to lowest
+
+Once an issue is resolved/a feature implemented, it will be moved to
+[DONE.md](https://github.com/alemontn/ksu-beyond1/blob/main/DONE.md)
 
 ##  How to install (Linux only)
 
