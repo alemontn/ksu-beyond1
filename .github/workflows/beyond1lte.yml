@@ -15,8 +15,8 @@ jobs:
   build:
     strategy:
       matrix:
-        kpath: /home/runner/work/ksu-beyond1/ksu-beyond1/kernel
-        tpath: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
+        kpath: [/home/runner/work/ksu-beyond1/ksu-beyond1/kernel]
+        tpath: [/home/runner/work/ksu-beyond1/ksu-beyond1/toolchain]
     runs-on: ubuntu-20.04
     steps:
       - name: Install dependencies
