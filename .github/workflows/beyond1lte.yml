@@ -17,6 +17,8 @@ jobs:
       matrix:
         kpath: [/home/runner/work/ksu-beyond1/ksu-beyond1/kernel]
         tpath: [/home/runner/work/ksu-beyond1/ksu-beyond1/toolchain]
+        defconfig: [arch/arm64/configs/exynos9820-beyond1lte_defconfig]
+
     runs-on: ubuntu-20.04
     steps:
       - name: Install dependencies
@@ -47,11 +49,15 @@ jobs:
         run: |
           cd ${{ matrix.kpath }}
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.9.5"
-          if ! grep "CONFIG_KSU=y" <"arch/arm64/configs/exynos9820-beyond1lte_defconfig"; then
-            echo "CONFIG_KSU=y" | tee "arch/arm64/configs/exynos9820-beyond1lte_defconfig"
+          if
+            ! grep -qF "CONFIG_KSU=y" ${{ matrix.defconfig }}; then
+            echo "CONFIG_KSU=y" | tee ${{ matrix.defconfig }}
+          elif
+            grep -qF "CONFIG_KSU=[a-z]" ${{ matrix.defconfig }}; then
+            sed -i "s/CONFIG_KSU=[a-z]/CONFIG_KSU=y/" ${{ matrix.defconfig }}
           fi
           for patch in ../patches/ksu/*.patch; do
-            git apply "$patch"
+            : #git apply "$patch"
           done
           git config advice.addEmbeddedRepo "false"
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
@@ -67,9 +73,10 @@ jobs:
           SUBARCH: arm64
         run: |
           cd ${{ matrix.kpath }}
-          export PATH="${{ matrix.tpath }}"/bin:"$PATH"
+          export PATH=${{ matrix.tpath }}/bin:"$PATH"
           export CC CROSS_COMPILE ARCH SUBARCH
-          make CC=$CC O=out "exynos9820-beyond1lte_defconfig"
+          defconfig=${{ matrix.defconfig }} defconfig="${defconfig##*'/'}"
+          make CC=$CC O=out "$defconfig"
           make -j$(nproc --all) CC=$CC O=out
           mv out/arch/arm64/boot/Image.gz ~
 
