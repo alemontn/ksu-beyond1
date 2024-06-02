@@ -13,6 +13,10 @@ env:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        kpath: /home/runner/work/ksu-beyond1/ksu-beyond1/kernel
+        tpath: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
     runs-on: ubuntu-20.04
     steps:
       - name: Install dependencies
@@ -23,23 +27,25 @@ jobs:
         with:
           repository: linux4-bringup-priv/android_kernel_samsung_exynos9820
           ref: lineage-21.0
-          path: /home/runner/work/ksu-beyond1/ksu-beyond1/kernel
+          path: ${{ matrix.kpath }}
           fetch-depth: 100
 
       - name: Get clang toolchain
         uses: actions/checkout@v3
         with:
           repository: kdrag0n/proton-clang
-          path: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
+          path: ${{ matrix.tpath }}
           fetch-depth: 100
 
       - name: Integrate KernelSU
         run: |
-          cd $KPATH
+          cd ${{ matrix.kpath }}
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- v"0.9.5"
           git config advice.addEmbeddedRepo "false"
+          git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
+          git config --global user.name "basil"
           git add . || true
-          git commit --author="basil <20985102-alemontn@users.noreply.gitlab.com>" -a -m "add KernelSU"
+          git commit -a -m "add KernelSU"
 
       - name: Get patches
         uses: actions/checkout@v3
@@ -49,7 +55,7 @@ jobs:
 
       - name: Apply patches
         run: |
-          cd $KPATH
+          cd ${{ matrix.kpath }}
           for patch in $(ls -d ../patches/patches/*.patch 2>/dev/null); do
             git apply "$patch"
           done
@@ -61,8 +67,8 @@ jobs:
           ARCH: arm64
           SUBARCH: arm64
         run: |
-          cd $KPATH
-          export PATH="$TPATH"/bin:"$PATH"
+          cd ${{ matrix.kpath }}
+          export PATH="${{ matrix.tpath }}"/bin:"$PATH"
           export CC CROSS_COMPILE ARCH SUBARCH
           make CC=$CC O=out "exynos9820-beyond1lte_defconfig"
           make -j$(nproc --all) CC=$CC O=out
