@@ -37,6 +37,7 @@ jobs:
         run: |
           cd $KPATH
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- v"0.9.5"
+          git config advice.addEmbeddedRepo "false"
           git add .
           git commit --author="basil <20985102-alemontn@users.noreply.gitlab.com>" -a -m "add KernelSU"
 
@@ -49,7 +50,7 @@ jobs:
       - name: Apply patches
         run: |
           cd $KPATH
-          for patch in ../patches/patches/*.patch; do
+          for patch in $(ls -d ../patches/patches/*.patch 2>/dev/null); do
             git apply "$patch"
           done
 
