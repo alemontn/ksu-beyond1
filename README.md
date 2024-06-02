@@ -2,6 +2,8 @@
 
 ![](working.png)
 
+![Build](https://github.com/alemontn/ksu-beyond1/actions/workflows/beyond1lte.yml/badge.svg)
+
 ## ⚠️ Warning
 
 The max version for KSU for non-GKI kernels (the S10's)
