@@ -57,11 +57,11 @@ jobs:
 
       - name: Show environment
         run: |
-          echo "==> PATHS"
-          find "$HOME"
+          #echo "==> PATHS"
+          #find "$HOME"
           echo "==> KERNEL CONFIG"
           for TERM in KPROBES HAVE_PROBES KPROBE_EVENTS KSU; do
-            grep -F "CONFIG_$TERM" <${{ matrix.defconfig }}
+            grep -F "CONFIG_$TERM" <${{ matrix.defconfig }} || true
           done
 
       - name: Build kernel
