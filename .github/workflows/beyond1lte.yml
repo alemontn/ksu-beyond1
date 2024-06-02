@@ -1,4 +1,4 @@
-name: Build kernel for beyond1lte
+name: beyond1lte
 
 on:
   push:
@@ -49,15 +49,15 @@ jobs:
         run: |
           cd ${{ matrix.kpath }}
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.9.5"
-          if
-            ! grep -qF "CONFIG_KSU=y" ${{ matrix.defconfig }}; then
-            echo "CONFIG_KSU=y" | tee ${{ matrix.defconfig }}
-          elif
-            grep -qF "CONFIG_KSU=[a-z]" ${{ matrix.defconfig }}; then
-            sed -i "s/CONFIG_KSU=[a-z]/CONFIG_KSU=y/" ${{ matrix.defconfig }}
-          fi
+          #if
+          #  ! grep -qF "CONFIG_KSU=y" ${{ matrix.defconfig }}; then
+          #  echo "CONFIG_KSU=y" | tee ${{ matrix.defconfig }}
+          #elif
+          #  grep -qF "CONFIG_KSU=[a-z]" ${{ matrix.defconfig }}; then
+          #  sed -i "s/CONFIG_KSU=[a-z]/CONFIG_KSU=y/" ${{ matrix.defconfig }}
+          #fi
           for patch in ../patches/ksu/*.patch; do
-            : #git apply "$patch"
+            git apply "$patch"
           done
           git config advice.addEmbeddedRepo "false"
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
