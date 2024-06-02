@@ -1,5 +1,5 @@
---- a/fs/exec.c	2024-06-02 14:22:36.678655159 +0100
-+++ b/fs/exec.c	2024-06-02 14:32:12.953934604 +0100
+--- a/fs/exec.c	2024-06-02 21:14:37.981035720 +0100
++++ b/fs/exec.c	2024-06-02 21:17:44.332885963 +0100
 @@ -2001,6 +2001,14 @@
  	return ret;
  }
@@ -7,24 +7,26 @@
 +#ifdef CONFIG_KSU
 +extern bool ksu_execveat_hook __read_mostly;
 +extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
-+	void *envp, int *flags);
++			void *envp, int *flags);
 +extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
-+	void *argv, void *envp, int *flags);
++				 void *argv, void *envp, int *flags);
 +#endif
 +
  /*
   * sys_execve() executes a new program.
   */
-@@ -2009,6 +2017,12 @@
- 			      struct user_arg_ptr envp,
- 			      int flags)
- {
+@@ -2171,6 +2179,14 @@
+ 		reset_files_struct(displaced);
+ out_ret:
+ 	putname(filename);
++
 +	#ifdef CONFIG_KSU
 +	if (unlikely(ksu_execveat_hook))
 +		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 +	else
 +		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
 +	#endif
- 	char *pathbuf = NULL;
- 	struct linux_binprm *bprm;
- 	struct file *file;
++
+ 	return retval;
+ }
+ 
