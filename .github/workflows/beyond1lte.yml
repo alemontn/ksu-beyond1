@@ -40,7 +40,7 @@ jobs:
       - name: Integrate KernelSU
         run: |
           cd ${{ matrix.kpath }}
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- v"0.9.5"
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- v"0.9.1"
           git config advice.addEmbeddedRepo "false"
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
           git config --global user.name "basil"
