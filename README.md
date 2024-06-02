@@ -7,28 +7,29 @@
 The max version for KSU for non-GKI kernels (the S10's)
 is 0.9.5, which is out-of-date. Please do not bug the
 creator of KSU or any other KSU contributors/devs with
-bugs asking why X, Y or Z doesn't work.
+bugs asking why X, Y & Z don't work.
 
 ## Compatibility
 
-This is built for LineageOS 21 (from Linux4) but may be
-compatible with other ROMS. If you want to test it, make
-sure to make a backup of your current bootimg in case
-something goes wrong.
+This is built from LineageOS 21 (Linux4's build) but may
+be compatible with other ROMS. If you want to test it,
+make sure to make a backup of your current bootimg in
+case something goes wrong.
 
-##  Known bugs/issues
+If you find success with another ROM, you can create an
+issue with the 'enhancement' label, providing your device
+name & model, your ROM & its version and it will be added
+to the list below.
 
-*  The kernel will be compiled with the '-dirty' suffix,
-   since running the KernelSU script makes the Git repo
-   'detached', meaning there are uncommited/unstashed
-   changes. This can cause Play Integrity to fail since
-   it will check the kernel's name. Play Integrity Fix
-   should fix this, though.
+Tested:
 
-*  Superuser list not working & resetting on every
-   restart
+✅ Samsung Galaxy S10 (Exynos)/beyond1lte, LineageOS 21.0
 
-*  Modules won't install & fail with 'os error 22'
+##  Known bugs/issues (to-do)
+
+See [TO-DO.md](https://github.com/alemontn/ksu-beyond1/blob/main/TO-DO.md)
+
+(The to-do list is sorted by highest priority to lowest)
 
 ##  How to install (Linux only)
 
@@ -49,11 +50,11 @@ something goes wrong.
 
     * Get the NDK (`./build.py ndk`)
 
-    * Compile standalone magiskboot (`./build.py binaries magiskboot`)
+    * Compile standalone magiskboot (`./build.py binary magiskboot`)
 
     * Install (`sudo install -m755 ./native/out/<ARCH>/magiskboot /usr/bin/magiskboot`)
 
-3)  Extract your device's boot image & removing the current kernel:
+3)  Extract your device's boot image & remove the current kernel:
 
     `magiskboot unpack boot.img`
 

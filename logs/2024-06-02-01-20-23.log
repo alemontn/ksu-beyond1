@@ -1,0 +1,12 @@
+  _  __                    _ ____  _   _ 
+ | |/ /___ _ __ _ __   ___| / ___|| | | |
+ | ' // _ \ '__| '_ \ / _ \ \___ \| | | |
+ | . \  __/ |  | | | |  __/ |___) | |_| |
+ |_|\_\___|_|  |_| |_|\___|_|____/ \___/ 
+
+- Preparing image
+- Module size: 1.56 MB
+e2fsck 1.46.6 (1-Feb-2023)
+- Mounting image
+- Error: Invalid argument (os error 22)
+Error: Invalid argument (os error 22)
