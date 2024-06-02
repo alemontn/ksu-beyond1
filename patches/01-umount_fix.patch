@@ -1,6 +1,6 @@
 KernelSU: support umount modules for 4.4 or higher Non-GKI kernel
 --- a/KernelSU/kernel/core_hook.c	2024-05-30 23:07:33.806592835 +0100
-+++ b/KernelSU/kernel/core_hook.c	2024-06-01 23:54:54.242818992 +0100
++++ b/KernelSU/kernel/core_hook.c	2024-06-02 00:17:18.958034194 +0100
 @@ -32,6 +32,8 @@
  #include <linux/vmalloc.h>
  #endif
