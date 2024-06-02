@@ -55,6 +55,20 @@ jobs:
           git add . || true
           git commit -a -m "add KernelSU"
 
+      - name: Show environment
+        run: |
+          echo "==> PATHS"
+          echo " * kernel"
+          find ${{ matrix.kpath }}
+          echo " * toolchain"
+          find ${{ matrix.tpath }}
+          echo " * patches"
+          find ${{ matrix.kpath }}../patches
+          echo "==> KERNEL CONFIG"
+          for TERM in KPROBES HAVE_PROBES KPROBE_EVENTS KSU; do
+            grep -F "CONFIG_$TERM" <${{ matrix.defconfig }}
+          done
+
       - name: Build kernel
         env:
           CC: clang
