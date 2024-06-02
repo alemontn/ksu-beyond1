@@ -30,6 +30,12 @@ jobs:
           path: ${{ matrix.kpath }}
           fetch-depth: 100
 
+      - name: Get patches
+        uses: actions/checkout@v3
+        with:
+          repository: alemontn/ksu-beyond1
+          path: /home/runner/work/ksu-beyond1/ksu-beyond1/patches
+
       - name: Get clang toolchain
         uses: actions/checkout@v3
         with:
@@ -40,25 +46,18 @@ jobs:
       - name: Integrate KernelSU
         run: |
           cd ${{ matrix.kpath }}
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s -- "9403c8f"
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.9.5"
+          if ! grep "CONFIG_KSU=y" <"arch/arm64/configs/exynos9820-beyond1lte_defconfig"; then
+            echo "CONFIG_KSU=y" | tee "arch/arm64/configs/exynos9820-beyond1lte_defconfig"
+          fi
+          for patch in ../patches/ksu/*.patch; do
+            git apply "$patch"
+          done
           git config advice.addEmbeddedRepo "false"
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
           git config --global user.name "basil"
           git add . || true
           git commit -a -m "add KernelSU"
-
-      - name: Get patches
-        uses: actions/checkout@v3
-        with:
-          repository: alemontn/ksu-beyond1
-          path: /home/runner/work/ksu-beyond1/ksu-beyond1/patches
-
-      - name: Apply patches
-        run: |
-          cd ${{ matrix.kpath }}
-          for patch in $(ls -d ../patches/patches/*.patch 2>/dev/null); do
-            git apply "$patch"
-          done
 
       - name: Build kernel
         env:

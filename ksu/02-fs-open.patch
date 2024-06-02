@@ -1,0 +1,25 @@
+--- a/fs/open.c	2024-06-02 14:22:36.766655188 +0100
++++ b/fs/open.c	2024-06-02 14:38:32.480901298 +0100
+@@ -358,6 +358,11 @@
+ 	return error;
+ }
+ 
++#ifdef CONFIG_KSU
++extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
++	int *flags);
++#endif
++
+ /*
+  * access() needs to use the real uid/gid, not the effective uid/gid.
+  * We do this by temporarily clearing all FS-related capabilities and
+@@ -373,6 +378,10 @@
+ 	int res;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW;
+ 
++	#ifdef CONFIG_KSU
++		ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
++	#endif
++
+ 	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
+ 		return -EINVAL;
+ 
