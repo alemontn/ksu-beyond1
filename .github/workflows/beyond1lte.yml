@@ -4,12 +4,8 @@ on:
   push:
     paths:
       - '.github/workflows/beyond1lte.yml'
-      - 'patches/**'
+      - 'ksu/**'
   workflow_dispatch:
-
-env:
-  KPATH: /home/runner/work/ksu-beyond1/ksu-beyond1/kernel
-  TPATH: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
 
 jobs:
   build:
@@ -49,16 +45,7 @@ jobs:
         run: |
           cd ${{ matrix.kpath }}
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.9.5"
-          #if
-          #  ! grep -qF "CONFIG_KSU=y" ${{ matrix.defconfig }}; then
-          #  echo "CONFIG_KSU=y" | tee ${{ matrix.defconfig }}
-          #elif
-          #  grep -qF "CONFIG_KSU=[a-z]" ${{ matrix.defconfig }}; then
-          #  sed -i "s/CONFIG_KSU=[a-z]/CONFIG_KSU=y/" ${{ matrix.defconfig }}
-          #fi
-          for patch in ../patches/ksu/*.patch; do
-            git apply "$patch"
-          done
+          git apply ../patches/ksu/*.patch
           git config advice.addEmbeddedRepo "false"
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
           git config --global user.name "basil"
