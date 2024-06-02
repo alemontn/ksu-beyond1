@@ -2,6 +2,9 @@ name: Build kernel for beyond1lte
 
 on:
   push:
+    paths:
+      - '.github/workflows/beyond1lte.yml'
+      - 'patches/**'
   workflow_dispatch:
 
 env:
