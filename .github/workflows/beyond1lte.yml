@@ -59,6 +59,7 @@ jobs:
         run: |
           #echo "==> PATHS"
           #find "$HOME"
+          cd ${{ matrix.kpath }}
           echo "==> KERNEL CONFIG"
           for TERM in KPROBES HAVE_PROBES KPROBE_EVENTS KSU; do
             grep -F "CONFIG_$TERM" <${{ matrix.defconfig }} || true
