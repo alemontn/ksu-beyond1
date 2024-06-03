@@ -44,11 +44,8 @@ jobs:
       - name: Integrate KernelSU
         run: |
           cd ${{ matrix.kpath }}
-          for VAR in CONFIG_KPROBES CONFIG_HAVE_KPROBES CONFIG_KPROBE_EVENTS; do
-            sed -i "s/$VAR=y/# $VAR is not set/" ${{ matrix.defconfig }}
-          done
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.9.5"
-          echo "CONFIG_KSU=y" >>${{ matrix.defconfig }}
+          echo "CONFIG_KSU=y" >> ${{ matrix.defconfig }}
           git apply ../patches/patches/*.patch
           git config advice.addEmbeddedRepo "false"
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
