@@ -44,7 +44,7 @@ jobs:
       - name: Integrate KernelSU
         run: |
           cd ${{ matrix.kpath }}
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.9.5"
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.7.5"
           echo "CONFIG_KSU=y" >> ${{ matrix.defconfig }}
           git apply ../patches/patches/*.patch
           git config advice.addEmbeddedRepo "false"
