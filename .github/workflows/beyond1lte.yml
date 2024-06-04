@@ -27,10 +27,10 @@ jobs:
           path: /home/runner/work/ksu-beyond1/ksu-beyond1
 
       - name: Update kernel source
-        run: git submodule init --update --recursive ${{ matrix.kpath }}
+        run: git submodule update --init ${{ matrix.kpath }}
 
       - name: Update clang toolchain
-        run: git submodule init --update --recursive ${{ matrix.tpath }}
+        run: git submodule update --init ${{ matrix.tpath }}
 
       - name: Integrate KernelSU
         run: |
