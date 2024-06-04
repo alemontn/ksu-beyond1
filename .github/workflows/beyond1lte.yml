@@ -37,7 +37,7 @@ jobs:
           cd ${{ matrix.kpath }}
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.9.5"
           echo "CONFIG_KSU=y" >> ${{ matrix.defconfig }}
-          git apply ../patches/patches/*.patch
+          git apply ../patches/*.patch
           git config advice.addEmbeddedRepo "false"
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
           git config --global user.name "basil"
