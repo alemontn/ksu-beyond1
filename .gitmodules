@@ -1,0 +1,6 @@
+[submodule "toolchain"]
+	path = toolchain
+	url = https://github.com/kdrag0n/proton-clang.git
+[submodule "kernel"]
+	path = kernel
+	url = https://github.com/linux4-bringup-priv/android_kernel_samsung_exynos9820
