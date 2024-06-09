@@ -1,9 +1,10 @@
-name: beyond1lte
+name: beyond1lte-ksu
 
 on:
   push:
     paths:
-      - '.github/workflows/beyond1lte.yml'
+      - '.github/workflows/beyond1lte-ksu.yml'
+      - 'patches/**'
   workflow_dispatch:
 
 jobs:
@@ -35,6 +36,26 @@ jobs:
       - name: Get kernel & toolchain submodule
         run: |
           git submodule update --init --recursive ${{ matrix.kernel }} ${{ matrix.toolchain }}
+
+      - name: Integrate KernelSU
+        run: |
+          cd ${{ matrix.kernel }}
+          # disable kprobes integration
+          sed -i "s|CONFIG_KPROBES=y|# CONFIG_KPROBES is not set|" ${{ matrix.defconfig }}
+          # use the commit before non-GKI support was removed
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s "b766b98"
+          # otherwise KernelSU won't build
+          echo "CONFIG_KSU=y" | tee ${{ matrix.defconfig }}
+          git apply ../patches/*.patch
+          # don't want your advice
+          git config advice.addEmbeddedRepo "false"
+          # since the email & name aren't carried over by default for some reason
+          git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
+          git config --global user.name "basil"
+          # git add may fail on a WARNING, which we ignore
+          git add . || true
+          # avoid '-dirty' appendage to kernel version
+          git commit -a -m "add KernelSU"
 
       - name: Build kernel
         env:
