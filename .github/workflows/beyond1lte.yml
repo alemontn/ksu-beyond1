@@ -31,10 +31,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: alemontn/ksu-beyond1
-          path: ${{ matrix.kernel }}
+          path: ~/ksu-beyond1/ksu-beyond1
 
       - name: Get kernel & toolchain submodule
-        run: git submodule init --update --recursive ${{ matrix.kernel }} ${{ matrix.toolchain }}
+        run: |
+          git submodule init --update --recursive ${{ matrix.kernel }} ${{ matrix.toolchain }}
 
       - name: Integrate KernelSU
         run: |
