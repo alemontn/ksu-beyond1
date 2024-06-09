@@ -67,7 +67,8 @@ jobs:
           cd ${{ matrix.kernel }}
           export PATH=${{ matrix.toolchain }}/bin:"$PATH"
           export CC CROSS_COMPILE ARCH SUBARCH
-          basename ${{ matrix.defconfig }} | make CC=$CC O=$OUT "$(</dev/stdin)"
+          defconfig=${{ matrix.defconfig }} defconfig="${defconfig##*'/'}"
+          make CC=$CC O=out "$defconfig"
           make -j$(nproc --all) CC=$CC O=out
           mv out/arch/arm64/boot/Image.gz ~
 
