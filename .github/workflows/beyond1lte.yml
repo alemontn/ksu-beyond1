@@ -38,7 +38,7 @@ jobs:
           for RM in KPROBES HAVE_KPROBES KPROBE_EVENTS; do
             sed -i "s/CONFIG_$RM=y/# CONFIG_$RM is not set/" ${{ matrix.defconfig }}
           done
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.9.5"
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v"0.7.1"
           echo "# KernelSU"$'\n'"CONFIG_KSU=y" | tee ${{ matrix.defconfig }}
           git apply ../patches/*.patch
           git config advice.addEmbeddedRepo "false"

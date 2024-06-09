@@ -75,12 +75,12 @@ Once an issue is resolved/a feature implemented, it will be moved to
 
 6)  Repack the boot image:
 
-    `magiskboot repack boot.img`
+    `magiskboot repack boot.img ksu-boot.img`
 
-7)  Flash the boot image:
+7)  Flash the new boot image:
 
     `adb reboot download`
 
-    `heimdall flash --BOOT boot.img`
+    `heimdall flash --BOOT ksu-boot.img`
 
 8)  Install the KernelSU manager
