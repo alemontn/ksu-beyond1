@@ -35,7 +35,7 @@ jobs:
 
       - name: Get kernel & toolchain submodule
         run: |
-          git submodule init --update --recursive ${{ matrix.kernel }} ${{ matrix.toolchain }}
+          git submodule update --init --recursive ${{ matrix.kernel }} ${{ matrix.toolchain }}
 
       - name: Integrate KernelSU
         run: |
