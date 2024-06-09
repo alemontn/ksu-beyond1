@@ -11,8 +11,8 @@ jobs:
   build:
     strategy:
       matrix:
-        kernel: [~/ksu-beyond1/ksu-beyond1/kernel]
-        toolchain: [~/ksu-beyond1/ksu-beyond1/toolchain]
+        kernel: [~/work/ksu-beyond1/ksu-beyond1/kernel]
+        toolchain: [~/work/ksu-beyond1/ksu-beyond1/toolchain]
         defconfig: [arch/arm64/configs/exynos9820-beyond1lte_defconfig]
 
     runs-on: ubuntu-20.04
