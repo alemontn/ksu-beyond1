@@ -1,5 +1,5 @@
---- a/fs/exec.c	2024-06-02 21:14:37.981035720 +0100
-+++ b/fs/exec.c	2024-06-09 02:56:57.420115270 +0100
+--- a/fs/exec.c	2024-06-09 20:22:56.624213890 +0100
++++ b/fs/exec.c	2024-06-09 20:31:50.157621882 +0100
 @@ -2001,6 +2001,14 @@
  	return ret;
  }
@@ -15,21 +15,23 @@
  /*
   * sys_execve() executes a new program.
   */
-@@ -2009,6 +2017,12 @@
- 			      struct user_arg_ptr envp,
- 			      int flags)
- {
+@@ -2171,6 +2179,14 @@
+ 		reset_files_struct(displaced);
+ out_ret:
+ 	putname(filename);
++
 +	#ifdef CONFIG_KSU
 +	if (unlikely(ksu_execveat_hook))
 +		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
 +	else
 +		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
 +	#endif
- 	char *pathbuf = NULL;
- 	struct linux_binprm *bprm;
- 	struct file *file;
---- a/fs/open.c	2024-06-02 21:14:37.993035708 +0100
-+++ b/fs/open.c	2024-06-09 02:59:05.092136077 +0100
++
+ 	return retval;
+ }
+ 
+--- a/fs/open.c	2024-06-09 20:22:56.748214218 +0100
++++ b/fs/open.c	2024-06-09 20:33:26.637876326 +0100
 @@ -358,6 +358,11 @@
  	return error;
  }
@@ -53,8 +55,8 @@
  	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
  		return -EINVAL;
  
---- a/fs/read_write.c	2024-06-02 21:14:38.001035701 +0100
-+++ b/fs/read_write.c	2024-06-09 03:00:41.520150420 +0100
+--- a/fs/read_write.c	2024-06-09 20:22:56.760214249 +0100
++++ b/fs/read_write.c	2024-06-09 20:35:00.226123102 +0100
 @@ -437,9 +437,19 @@
  }
  EXPORT_SYMBOL(kernel_read);
@@ -75,8 +77,8 @@
  
  	if (!(file->f_mode & FMODE_READ))
  		return -EBADF;
---- a/fs/stat.c	2024-06-02 21:14:38.009035693 +0100
-+++ b/fs/stat.c	2024-06-09 03:02:07.228162358 +0100
+--- a/fs/stat.c	2024-06-09 20:22:56.780214302 +0100
++++ b/fs/stat.c	2024-06-09 20:35:57.410273881 +0100
 @@ -148,6 +148,10 @@
  }
  EXPORT_SYMBOL(vfs_statx_fd);
