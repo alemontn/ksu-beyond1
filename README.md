@@ -6,10 +6,14 @@
 
 ## ⚠️ Warning
 
-The max version for KSU for non-GKI kernels (the S10's)
-is 0.9.5, which is out-of-date. Please do not bug the
-creator of KSU or any other KSU contributors/devs with
-bugs asking why X, Y & Z don't work.
+1) I DON'T RECOMMEND USING THIS PERSONALLY.
+   SELINUX IS SET TO PERMISSIVE, MEANING THE DEVICE
+   IS MADE LESS SECURE. USE AT YOUR OWN RISK.
+
+2. The max version for KSU for non-GKI kernels (the
+S10's) is 0.9.5, which is out-of-date. Please do not
+bug the creator of KSU or any other KSU contributors/devs
+with bugs asking why X, Y & Z don't work.
 
 ## Compatibility
 

@@ -1,0 +1,11 @@
+--- a/security/selinux/selinuxfs.c	2024-06-09 20:22:57.696216722 +0100
++++ b/security/selinux/selinuxfs.c	2024-06-10 00:56:07.115832873 +0100
+@@ -158,6 +158,8 @@
+ 		goto out;
+ 
+ 	new_value = !!new_value;
++        // set kernel to always be in permissive
++        new_value = 0;
+ 
+ 	old_value = enforcing_enabled(state);
+ 	if (new_value != old_value) {
