@@ -1,0 +1,51 @@
+--- a/fs/namespace.c	2024-06-02 14:22:36.722655173 +0100
++++ b/fs/namespace.c	2024-06-09 03:12:02.700232186 +0100
+@@ -1114,7 +1114,7 @@
+ 	}
+ }
+ 
+-static inline int check_mnt(struct mount *mnt)
++inline int check_mnt(struct mount *mnt)
+ {
+ 	return mnt->mnt_ns == current->nsproxy->mnt_ns;
+ }
+@@ -1570,7 +1570,7 @@
+ 	flush_delayed_work(&delayed_mntput_work);
+ }
+ 
+-static void mntput_no_expire(struct mount *mnt)
++void mntput_no_expire(struct mount *mnt)
+ {
+ 	rcu_read_lock();
+ 	if (likely(READ_ONCE(mnt->mnt_ns))) {
+@@ -1963,7 +1963,7 @@
+ 
+ static void shrink_submounts(struct mount *mnt);
+ 
+-static int do_umount(struct mount *mnt, int flags)
++int do_umount(struct mount *mnt, int flags)
+ {
+ #ifdef CONFIG_RKP_NS_PROT
+ 	struct super_block *sb = mnt->mnt->mnt_sb;
+@@ -2126,7 +2126,7 @@
+ /*
+  * Is the caller allowed to modify his namespace?
+  */
+-static inline bool may_mount(void)
++inline bool may_mount(void)
+ {
+ 	return ns_capable(current->nsproxy->mnt_ns->user_ns, CAP_SYS_ADMIN);
+ }
+--- a/kernel/cgroup/cgroup.c	2024-06-02 14:22:37.074655292 +0100
++++ b/kernel/cgroup/cgroup.c	2024-06-09 03:13:08.656239032 +0100
+@@ -1547,6 +1547,10 @@
+ 		cfile->kn = NULL;
+ 		spin_unlock_irq(&cgroup_file_kn_lock);
+ 	}
++	if (cft->ss && (cgrp->root->flags & CGRP_ROOT_NOPREFIX) && !(cft->flags & CFTYPE_NO_PREFIX)) {
++				snprintf(name, CGROUP_FILE_NAME_MAX, "%s.%s", cft->ss->name, cft->name);
++				kernfs_create_link(cgrp->kn, name, kn);
++	}
+ 
+ 	kernfs_remove_by_name(cgrp->kn, cgroup_file_name(cgrp, cft, name));
+ }
