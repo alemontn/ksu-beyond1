@@ -35,13 +35,15 @@ jobs:
 
       - name: Get kernel & toolchain submodule
         run: |
-          git submodule update --init --recursive ${{ matrix.kernel }} ${{ matrix.toolchain }}
+          git submodule update --init --recursive ${{ matrix.kernel }} \
+            ${{ matrix.toolchain }}
 
       - name: Integrate KernelSU
         run: |
           cd ${{ matrix.kernel }}
           # use the commit before non-GKI support was removed
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s "b766b98"
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" |
+            bash -s "b766b98"
           # otherwise KernelSU won't build
           echo "CONFIG_KSU=y" | tee -a ${{ matrix.defconfig }}
           # don't want your advice
@@ -49,6 +51,11 @@ jobs:
           # since the email & name aren't carried over by default for some reason
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
           git config --global user.name "basil"
+          # apply patches
+          if [ -n "$(ls -d ~/work/ksu-beyond1/ksu-beyond1/patches/*.patch 2>/dev/null)" ]
+          then
+            git apply ~/work/ksu-beyond1/ksu-beyond1/patches/*.patch
+          fi
           # git add may fail on a WARNING, which we ignore
           git add . || true
           # avoid '-dirty' appendage to kernel version

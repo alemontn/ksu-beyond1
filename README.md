@@ -6,26 +6,22 @@
 
 ## ⚠️ Warning
 
-1) I DON'T RECOMMEND USING THIS PERSONALLY.
-   SELINUX IS SET TO PERMISSIVE, MEANING THE DEVICE
-   IS MADE LESS SECURE. USE AT YOUR OWN RISK.
-
-2. The max version for KSU for non-GKI kernels (the
-S10's) is 0.9.5, which is out-of-date. Please do not
-bug the creator of KSU or any other KSU contributors/devs
-with bugs asking why X, Y & Z don't work.
+The max version for KSU for non-GKI kernels (the S10's)
+is 0.9.5, which is out-of-date. Never bug the KernelSU
+repo. Send bug reports here, not to KernelSU, it is not
+their fault
 
 ## Compatibility
 
 This is built from LineageOS 21 (Linux4's build) but may
 be compatible with other ROMS. If you want to test it,
 make sure to make a backup of your current bootimg in
-case something goes wrong.
+case something goes wrong
 
 If you find success with another ROM, you can create an
 issue with the 'enhancement' label, providing your device
 name & model, your ROM & its version and it will be added
-to the list below.
+to the list below
 
 Tested:
 
