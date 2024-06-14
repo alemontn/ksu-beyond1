@@ -13,6 +13,7 @@ jobs:
       matrix:
         kernel: [~/work/ksu-beyond1/ksu-beyond1/kernel]
         toolchain: [~/work/ksu-beyond1/ksu-beyond1/toolchain]
+        ksu: [~/work/ksu-beyond1/ksu-beyond1/KernelSU]
         defconfig: [arch/arm64/configs/exynos9820-beyond1lte_defconfig]
 
     runs-on: ubuntu-20.04
@@ -33,20 +34,21 @@ jobs:
           repository: alemontn/ksu-beyond1
           path: /home/runner/work/ksu-beyond1/ksu-beyond1
 
-      - name: Get kernel & toolchain submodule
-        run: |
-          git submodule update --init --recursive ${{ matrix.kernel }} \
-            ${{ matrix.toolchain }}
+      - name: Get kernel source
+        run: git submodule update --init ${{ matrix.kernel }}
+
+      - name: Get toolchain
+        run: git submodule update --init ${{ matrix.toolchain }}
+
+      - name: Get KernelSU
+        run: git submodule update --init ${{ matrix.ksu }}
 
       - name: Integrate KernelSU
         run: |
           cd ${{ matrix.kernel }}
-          # add KernelSU
-          git submodule add https://github.com/privacyguy123/KernelSU
-          git submodule update --init KernelSU/
           # create symlink
           cd drivers/
-          ln -s ../KernelSU/kernel kernelsu
+          ln -s ../../KernelSU/kernel kernelsu
           cd ..
           # otherwise KernelSU won't build
           echo "CONFIG_KSU=y" | tee -a ${{ matrix.defconfig }}
@@ -56,10 +58,7 @@ jobs:
           git config --global user.email "20985102-alemontn@users.noreply.gitlab.com"
           git config --global user.name "basil"
           # apply patches
-          if [ -n "$(ls -d ~/work/ksu-beyond1/ksu-beyond1/patches/*.patch 2>/dev/null)" ]
-          then
-            git apply ~/work/ksu-beyond1/ksu-beyond1/patches/*.patch
-          fi
+          git apply $(ls -d ~/work/ksu-beyond1/ksu-beyond1/patches/*.patch) || true
           # git add may fail on a WARNING, which we ignore
           git add . || true
           # avoid '-dirty' appendage to kernel version

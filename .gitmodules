@@ -4,3 +4,6 @@
 [submodule "kernel"]
 	path = kernel
 	url = https://github.com/linux4-bringup-priv/android_kernel_samsung_exynos9820
+[submodule "KernelSU"]
+	path = KernelSU
+	url = https://github.com/privacyguy123/KernelSU
