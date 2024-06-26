@@ -13,7 +13,7 @@ jobs:
       matrix:
         kernel: [~/work/ksu-beyond1/ksu-beyond1/kernel]
         toolchain: [~/work/ksu-beyond1/ksu-beyond1/toolchain]
-        ksu: [~/work/ksu-beyond1/ksu-beyond1/KernelSU]
+        ksu_remote: [https://github.com/privacyguy123/KernelSU]
         defconfig: [arch/arm64/configs/exynos9820-beyond1lte_defconfig]
 
     runs-on: ubuntu-20.04
@@ -50,7 +50,8 @@ jobs:
           done
           # use the commit before non-GKI support was removed
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" |
-            bash -s "b766b98"
+            sed "s|https://github.com/tiann/KernelSU|${{ matrix.ksu_remote }}|g" |
+            bash
           # otherwise KernelSU won't build
           echo "CONFIG_KSU=y" | tee -a ${{ matrix.defconfig }}
           # don't want your advice
