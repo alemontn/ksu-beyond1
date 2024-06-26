@@ -50,6 +50,11 @@ jobs:
           cd drivers/
           ln -s ../../KernelSU/kernel kernelsu
           cd ..
+          # (attempt?) to bypass Samsung security mechanisms
+          for e in MODULE_FORCE_LOAD MODULE_FORCE_UNLOAD
+          do
+            sed -i "s|# CONFIG_$e is not set|CONFIG_$e=y|" ${{ matrix.defconfig }}
+          done
           # otherwise KernelSU won't build
           echo "CONFIG_KSU=y" | tee -a ${{ matrix.defconfig }}
           # don't want your advice
