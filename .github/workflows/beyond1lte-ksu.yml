@@ -52,6 +52,10 @@ jobs:
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" |
             sed "s|tiann/KernelSU|${{ matrix.ksu_remote }}|g" |
             bash
+          # remove 'susfs' patch
+          cd KernelSU
+          git apply -R '10_enable_susfs_for_ksu.patch'
+          cd ..
           # otherwise KernelSU won't build
           echo "CONFIG_KSU=y" | tee -a ${{ matrix.defconfig }}
           # don't want your advice
