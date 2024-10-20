@@ -50,8 +50,8 @@ jobs:
           ARCH: arm64
           SUBARCH: arm64
         run: |
-          cd ~/ksu-beyond1/ksu-beyond1
-          export PATH=~/ksu-beyond1/ksu-beyond1/toolchain/bin:"$PATH"
+          cd ~/work/ksu-beyond1/ksu-beyond1
+          export PATH=~/work/ksu-beyond1/ksu-beyond1/toolchain/bin:"$PATH"
           export CC CROSS_COMPILE ARCH SUBARCH
           defconfig="exynos9820-beyond1lte_defconfig"
           make CC=$CC O=out "$defconfig"
