@@ -41,7 +41,7 @@ jobs:
           git commit -a -m "add KernelSU"
 
       - name: Show directory tree
-        run: tree ~
+        run: tree ~ >~/tree.log
 
       - name: Build kernel
         env:
@@ -57,6 +57,13 @@ jobs:
           make CC=$CC O=out "$defconfig"
           make -j$(nproc --all) CC=$CC O=out
           mv out/arch/arm64/boot/Image.gz ~
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs
+          path: /home/runner/*.log
 
       - name: Upload output
         uses: actions/upload-artifact@v3
