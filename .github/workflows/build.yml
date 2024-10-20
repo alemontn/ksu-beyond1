@@ -25,11 +25,17 @@ jobs:
           repository: LineageOS/android_kernel_samsung_exynos9820
           path: /home/runner/work/ksu-beyond1/ksu-beyond1
 
-      - name: Get toolchain
+      - name: Clone toolchain
         uses: actions/checkout@v3
         with:
           repository: kdrag0n/proton-clang
           path: /home/runner/work/ksu-beyond1/ksu-beyond1/toolchain
+
+      - name: Clone patches
+        uses: actions/checkout@v3
+        with:
+          repository: alemontn/ksu-beyond1
+          path: /home/runner/work/ksu-beyond1/ksu-beyond1/patches
 
       - name: Integrate KernelSU
         run: |
@@ -39,6 +45,12 @@ jobs:
           git config --global user.name "ethyl"
           git add . || true
           git commit -a -m "add KernelSU"
+
+      - name: Apply patches
+        run: |
+          cd ~/work/ksu-beyond1/ksu-beyond1
+          git apply patches/patches/*.patch
+          git commit -a -m "apply patches"
 
       - name: Show directory tree
         run: tree ~ >~/tree.log
