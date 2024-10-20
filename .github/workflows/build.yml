@@ -16,7 +16,7 @@ jobs:
            python-all-dev binutils-dev bc libcap-dev autoconf libgmp-dev \
            build-essential pkg-config libmpc-dev libmpfr-dev autopoint gettext txt2man \
            liblzma-dev libssl-dev libz-dev mercurial wget tar gcc-10 g++-10 zstd \
-           libarchive-tools \
+           libarchive-tools tree \
             -y --fix-broken --fix-missing
 
       - name: Clone kernel source
@@ -39,6 +39,9 @@ jobs:
           git config --global user.name "ethyl"
           git add . || true
           git commit -a -m "add KernelSU"
+
+      - name: Show directory tree
+        run: tree ~
 
       - name: Build kernel
         env:
